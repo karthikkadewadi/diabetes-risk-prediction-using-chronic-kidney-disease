@@ -1,0 +1,165 @@
+import pandas as pd
+df2=pd.read_csv('diabetes_binary_health_indicators_BRFSS2015.csv')
+df2.head()
+
+
+print(df2)
+
+df2.info()
+
+
+df2 = df2.iloc[:, :-2]
+
+print(df2)
+
+print(df2['Diabetes_binary'].value_counts())
+
+df2.describe()
+
+#total percentage of missing data
+missing_data = df2.isnull().sum()
+total_percentage = (missing_data.sum()/df2.shape[0]) * 100
+print(f'The total percentage of missing data is {round(total_percentage,2)}%')
+
+# percentage of missing data per category
+total = df2.isnull().sum().sort_values(ascending=False)
+percent_total = (df2.isnull().sum()/df2.isnull().count()).sort_values(ascending=False)*100
+missing = pd.concat([total, percent_total], axis=1, keys=["Total", "Percentage"])
+missing_data = missing[missing['Total']>0]
+missing_data
+
+
+missing_data = df2.isna().any()
+print("Columns with missing data:")
+print(missing_data)
+
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+plt.figure(figsize=(30,30))
+sns.heatmap(df2.corr(), annot = True,annot_kws={"fontsize":14,"fontweight":'bold'})
+plt.show()
+
+
+
+fig = plt.figure(figsize = (30,30))
+ax = fig.gca()
+df2.hist(ax = ax)
+plt.show()	
+
+
+
+from matplotlib.font_manager import FontProperties
+# box plot after log transformation
+import plotly.graph_objects as go
+fig = go.Figure()
+for col in df2:
+  fig.add_trace(go.Box(y=df2[col].values, name=df2[col].name))
+fig.update_layout(plot_bgcolor='white')
+fig.update_layout(width=1600, height=1000)
+fig.update_layout({'font.size': 14},{'font.weight':'bold'})
+fig.show()
+
+
+
+
+# Calculate the correlation of all other columns with the target variable
+correlation_with_target = df2.corr()['Diabetes_binary'].drop('Diabetes_binary')
+print("Correlation of all other columns with the target variable:")
+print(correlation_with_target)
+
+
+
+
+
+
+
+
+
+# Calculate the correlation of all other columns with the target variable
+correlation_with_target = df2.corr()['Diabetes_binary'].drop('Diabetes_binary')
+
+# Get the absolute correlation values and sort them in descending order
+abs_correlation = correlation_with_target.abs().sort_values(ascending=False)
+
+# Select the top n features with the highest absolute correlation coefficients
+n = 5  # Number of top features to select
+top_features = abs_correlation.head(n)
+
+print("Top", n, "features with highest correlation with the target variable:")
+print(top_features)
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Calculate the correlation of all other columns with the target variable
+correlation_with_target = df2.corr()['Diabetes_binary'].drop('Diabetes_binary')
+
+# Get the absolute correlation values and sort them in ascending order
+abs_correlation = correlation_with_target.abs().sort_values()
+
+# Select the top n features with the lowest absolute correlation coefficients
+n = 5  # Number of top features to select
+lowest_features = abs_correlation.head(n)
+
+print("Top", n, "features with lowest correlation with the target variable:")
+print(lowest_features)
+
+
+
+
+
+
+
+
+
+import seaborn as sns
+sns.pairplot(df2, hue="Diabetes_binary")
+
+
+
+
+
+
+
+from pandas.plotting import parallel_coordinates
+import matplotlib.pyplot as plt
+
+# Create a parallel coordinate plot
+# 'Diabetes_binary' is used to color the lines
+# 'colormap' parameter specifies the colormap to use for coloring the lines
+parallel_coordinates(df2, 'Diabetes_binary', colormap=plt.get_cmap("Set1"))
+
+# Show the plot
+plt.show()
+
+
+
+
+
+
+
+
+from pandas.plotting import parallel_coordinates
+import matplotlib.pyplot as plt
+
+# Set the size of the figure to be very large
+plt.figure(figsize=(20, 12))  # Adjust the width and height as needed
+
+# Create a parallel coordinate plot
+# 'Diabetes_binary' is used to color the lines
+# 'colormap' parameter specifies the colormap to use for coloring the lines
+parallel_coordinates(df2, 'Diabetes_binary', colormap=plt.get_cmap("Set1"))
+
+# Show the plot
+plt.show()
+	
